@@ -1,8 +1,8 @@
 import "./login.css";
-import {useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {SocialAuthList} from "../socialAuthList/socialAuthList";
 import {Password} from "../password/password";
-import {ToastContainer, toast} from "react-toastify";
+import {toast} from "react-toastify";
 import {userLogin} from "../../../service/user.service";
 
 export const Login = (props) => {
@@ -22,6 +22,7 @@ export const Login = (props) => {
     e.preventDefault();
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value;
+
     if (!email || !password) {
       toast.error("Please enter email and password");
       return;
@@ -36,6 +37,7 @@ export const Login = (props) => {
     try {
       await userLogin(email, password);
       emailRef.current.value = "";
+      passwordRef.current.value = "";
       toast.success("User login success!");
     } catch (err) {
       toast.error(err.message);
@@ -61,10 +63,14 @@ export const Login = (props) => {
           </div>
 
           <Password passwordRef={passwordRef} />
-          <ToastContainer />
           <div className={"form-options"}>
             <label className={"checkbox-label"}>
-              <input type="checkbox" name="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} className={"checkbox-input"} />
+              <input 
+              type="checkbox" 
+              name="rememberMe" 
+              checked={rememberMe} 
+              onChange={(e) => setRememberMe(e.target.checked)} 
+              className={"checkbox-input"} />
               <span>Remember me</span>
             </label>
 

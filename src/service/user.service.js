@@ -35,6 +35,8 @@
 
 }   */
 
+
+
 export const userRegister = async (email, password) => {
   const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
   const userExists = existingUsers.some((user) => user.email === email);

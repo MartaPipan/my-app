@@ -37,8 +37,8 @@ export const Registration = (props) => {
     }
     if (!password) {
       currentErrors.password.push("Password should be added");
-    } else if (password.length < 8) {
-      currentErrors.password.push("Password must be at least 8 characters");
+    } else if (password.length < 6) {
+      currentErrors.password.push("Password must be at least 6 characters");
     }
     if (!confirmaPassword) {
       currentErrors.currentPassword.push("Confirm password should be added");
