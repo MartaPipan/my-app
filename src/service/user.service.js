@@ -3,12 +3,9 @@
   if (!email || email.length === 0 || !email.length) {
     throw new Error('Email is empty')
   }
-
-  
   if (!password || !password.length) {
     throw new Error('Password is empty')
   }
-
   const data = {
     username: email,
     password: password,
@@ -30,9 +27,7 @@
   if (response.ok) {
     return result
   }
-
   throw Error(result.message)
-
 }   */
 
 
@@ -55,12 +50,12 @@ export const userRegister = async (email, password) => {
   localStorage.setItem("users", JSON.stringify(existingUsers));
 
   const currentUser = {id: newUser.id, email: newUser.email};
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
 
   return currentUser;
 };
 
-export const userLogin = async (email, password) => {
+export const userLogin = async (email, password, rememberMe = false) => {
   if (!email || email.length === 0 || !email.length) {
     throw new Error("Email is empty");
   }
@@ -69,14 +64,25 @@ export const userLogin = async (email, password) => {
   }
 
   const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-  const foundUser = existingUsers.find((user) => user.email === email && user.password === password);
+
+  const foundUser = existingUsers.find(
+    (user) => user.email === email && user.password === password);
 
   if (!foundUser) {
     throw new Error("Invalid email or password");
   }
 
-  const currentUser = {id: foundUser.id, email: foundUser.email};
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  const currentUser = { id: foundUser.id, email: foundUser.email };
+
+  localStorage.removeItem("currentUser");
+  sessionStorage.removeItem("currentUser");
+
+  if (rememberMe) {
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  } else {
+    sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+  }
 
   return currentUser;
 };
+

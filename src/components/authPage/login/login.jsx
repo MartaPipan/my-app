@@ -1,5 +1,5 @@
 import "./login.css";
-import {useRef, useState} from "react";
+import {useRef, useState, useEffect } from "react";
 import {SocialAuthList} from "../socialAuthList/socialAuthList";
 import {Password} from "../password/password";
 import {toast} from "react-toastify";
@@ -11,6 +11,15 @@ export const Login = (props) => {
   // const [email, setEmail] = useState('')
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("currentUser");
+    if (savedUser && emailRef.current) {
+      const parsedUser = JSON.parse(savedUser);
+      emailRef.current.value = parsedUser.email;
+      setRememberMe(true);
+    }
+  }, []);
 
   // useEffect(() => {
   //   toast.success("This is success")
@@ -35,10 +44,17 @@ export const Login = (props) => {
     }
 
     try {
-      await userLogin(email, password);
+      await userLogin(email, password, rememberMe);
       emailRef.current.value = "";
       passwordRef.current.value = "";
-      toast.success("User login success!");
+      if (!rememberMe) {
+        emailRef.current.value = "";
+      }
+      toast.success(
+        rememberMe
+          ? "Login success! Saved in Local Storage"
+          : "Login success! Saved in Session Storage"
+      );
     } catch (err) {
       toast.error(err.message);
     }
@@ -55,6 +71,7 @@ export const Login = (props) => {
               type="text"
               name="login"
               ref={emailRef}
+              autoComplete="email"
               // value={email}
               // onChange={e => setEmail(e.target.value)}
               placeholder="Login or Email"
