@@ -54,6 +54,7 @@ export const Password = (props) => {
         type={showPassword ? "text" : "password"} 
         placeholder={placeholder}
         onChange={onChange} 
+        autoComplete={isRegistration ? "new-password" : "current-password"}
         className="auth-input auth-input--with-icon" />
         
         <div className={"input-actions"}>

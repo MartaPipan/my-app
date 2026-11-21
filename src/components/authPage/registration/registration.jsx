@@ -75,7 +75,13 @@ export const Registration = (props) => {
 
         <form onSubmit={onSubmit} noValidate className="auth-form auth-form--compact">
           <div className="field-group">
-            <input ref={emailRef} type="email" name="email" placeholder="Email" className={`auth-input`} />
+            <input 
+            ref={emailRef} 
+            type="email" 
+            name="email" 
+            autoComplete="email" 
+            placeholder="Email" 
+            className={`auth-input`} />
           </div>
           {errors.email.map((error, index) => (
             <p key={index}>{error}</p>
