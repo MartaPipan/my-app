@@ -1,4 +1,4 @@
-export const userLogin = async (email, password) => {
+/*export const userLogin = async (email, password) => {
 
   if (!email || email.length === 0 || !email.length) {
     throw new Error('Email is empty')
@@ -33,8 +33,48 @@ export const userLogin = async (email, password) => {
 
   throw Error(result.message)
 
-}
+}   */
 
-export const userRegister = async () => {
-  
-}
+export const userRegister = async (email, password) => {
+  const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+  const userExists = existingUsers.some((user) => user.email === email);
+
+  if (userExists) {
+    throw new Error("User with this email already exists");
+  }
+
+  const newUser = {
+    id: Date.now(),
+    email: email,
+    password: password,
+  };
+
+  existingUsers.push(newUser);
+  localStorage.setItem("users", JSON.stringify(existingUsers));
+
+  const currentUser = {id: newUser.id, email: newUser.email};
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+  return currentUser;
+};
+
+export const userLogin = async (email, password) => {
+  if (!email || email.length === 0 || !email.length) {
+    throw new Error("Email is empty");
+  }
+  if (!password || !password.length) {
+    throw new Error("Password is empty");
+  }
+
+  const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
+  const foundUser = existingUsers.find((user) => user.email === email && user.password === password);
+
+  if (!foundUser) {
+    throw new Error("Invalid email or password");
+  }
+
+  const currentUser = {id: foundUser.id, email: foundUser.email};
+  localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+  return currentUser;
+};
